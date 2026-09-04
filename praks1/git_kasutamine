@@ -22,3 +22,25 @@ remote seadistamine:
 git remote add skriptimine git@github.com:kasutajanimi/reponimi.git
 git remote -v
 
+põhikasutamine:
+
+a) pane fail jälgimisele:
+git add failinimi
+
+b) kirjelda muudatus versioonihaldussüsteemis:
+git commit -m "muudatuse kirjeldus"
+
+c) lükka muudatused githubi:
+git push -u origin(või skriptimine) master
+
+d) vaata repode nimekirja ja aadresse:
+git remote -v
+
+e) nimeta remote ümber:
+git remote rename origin UUSNIMI
+
+f) kui midagi katki - lokaalne repo lõhki:
+- tõsta failid välja ülemkausta: mv failinimi ..
+- kustuta vigane repo: rm -rf kaustanimi/
+- kloони viimane korralik seis githubist: git clone aadress.git
+- tõsta failid tagasi ja jätka: git add / git commit / git push
