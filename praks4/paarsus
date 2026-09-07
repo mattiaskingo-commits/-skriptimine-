@@ -1,0 +1,18 @@
+#!/bin/bash
+# 
+# paarsuse kontroll kasutades kasurea parameetrit
+#
+if [ $# -ne 1 ] 
+then
+ echo "Kaivita see skript koos arvuga mille paarsus soovid kontrollida. Naiteks: $0 3"
+else
+arv=$1
+jaak=$(( $arv % 2 ))
+ if [ $jaak -eq 0 ]
+ then 
+echo "Antud arv on paaris" 
+else
+ echo "Antud arv on paaritu"
+fi
+fi
+
