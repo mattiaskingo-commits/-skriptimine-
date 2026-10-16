@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Ülesanne 5: paroolide genereerimine ja logimine
+# Kasutus: ./kasutajad_paroolid_genereeritud kasutajate_fail
+# Vajab käsku pwgen (apt install pwgen)
+if [ $# -ne 1 ]; then
+    echo "Kasutusjuhend: $0 kasutajad"
+    exit 1
+fi
+
+if ! which pwgen > /dev/null 2>&1; then
+    echo "pwgen puudub, paigalda: apt install pwgen"
+    exit 1
+fi
+
+kasutajad=$1
+logifail="loodud_kasutajad_paroolidega"
+
+if [ -f "$kasutajad" ] && [ -r "$kasutajad" ]; then
+    echo "fail on korras"
+    touch "$logifail"
+    chmod 600 "$logifail"      # logis on paroolid, seega ainult omanikule
+    while read -r kasutajanimi || [ -n "$kasutajanimi" ]; do
+        [ -z "$kasutajanimi" ] && continue
+
+        useradd "$kasutajanimi" -m -s /bin/bash
+        kasu_tulemus=$?
+        if [ $kasu_tulemus -eq 0 ]; then
+            echo "Kasutaja nimega $kasutajanimi on lisatud süsteemi"
+            parool=$(pwgen -s 8 -1)
+            echo "$kasutajanimi:$parool" | chpasswd
+            echo "$kasutajanimi:$parool" >> "$logifail"
+            grep "^$kasutajanimi:" /etc/passwd
+            ls -la "/home/$kasutajanimi"
+        else
+            echo "probleem kasutaja $kasutajanimi lisamisega (kood $kasu_tulemus)"
+        fi
+    done < "$kasutajad"
+else
+    echo "probleem failiga $kasutajad"
+    exit 1
+fi
