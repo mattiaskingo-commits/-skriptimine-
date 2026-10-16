@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Ülesanne 3: kasutajad paroolidega failist (iga rida = kasutajanimi:parool)
+if [ $# -ne 1 ]; then
+    echo "Kasutusjuhend: $0 failinimi"
+    exit 1
+fi
+
+failinimi=$1
+KAUST="$(cd "$(dirname "$0")" && pwd)"
+
+if [ -f "$failinimi" ] && [ -r "$failinimi" ]; then
+    echo "fail on korras"
+    while IFS= read -r rida || [ -n "$rida" ]; do
+        [ -z "$rida" ] && continue
+        kasutajanimi=$(echo "$rida" | cut -f1 -d:)
+        bash "$KAUST/lisa_kasutaja" "$kasutajanimi"
+        echo "$rida" | chpasswd   # määrab kasutajale parooli (kujul kasutaja:parool)
+    done < "$failinimi"
+else
+    echo "probleem failiga $failinimi"
+    exit 1
+fi
