@@ -3,6 +3,13 @@
 # Ülesanne 5: paroolide genereerimine ja logimine
 # Kasutus: ./kasutajad_paroolid_genereeritud kasutajate_fail
 # Vajab käsku pwgen (apt install pwgen)
+
+# Ülesanne 6: skripti tohib käivitada ainult päris root (mitte sudo kaudu)
+kaivitav_kasutaja=$(whoami)
+if [ "$kaivitav_kasutaja" != "root" ] || [ -n "$SUDO_USER" ]; then
+    echo "Sul ei ole õigust antud skripti käivitamiseks"
+    exit 1
+fi
 if [ $# -ne 1 ]; then
     echo "Kasutusjuhend: $0 kasutajad"
     exit 1
